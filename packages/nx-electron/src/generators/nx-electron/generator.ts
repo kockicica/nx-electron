@@ -21,7 +21,7 @@ import {
 import { join } from 'path';
 
 import { Linter, lintProjectGenerator } from '@nx/eslint';
-import { jestProjectGenerator } from '@nx/jest';
+import { configurationGenerator } from '@nx/jest';
 
 import { Schema } from './schema';
 import { generator as initGenerator } from '../init/generator';
@@ -36,7 +36,7 @@ function getBuildConfig(
   options: NormalizedSchema
 ): TargetConfiguration {
   return {
-    executor: 'nx-electron:build',
+    executor: '@kockicica/nx-electron:build',
     outputs: ['{options.outputPath}'],
     options: {
       outputPath: joinPathFragments('dist', options.appProjectRoot),
@@ -68,7 +68,7 @@ function getBuildConfig(
 
 function getServeConfig(options: NormalizedSchema): TargetConfiguration {
   return {
-    executor: 'nx-electron:execute',
+    executor: '@kockicica/nx-electron:execute',
     options: {
       buildTarget: `${options.name}:build`,
     },
@@ -77,7 +77,7 @@ function getServeConfig(options: NormalizedSchema): TargetConfiguration {
 
 function getPackageConfig(options: NormalizedSchema): TargetConfiguration {
   return {
-    executor: 'nx-electron:package',
+    executor: '@kockicica/nx-electron:package',
     options: {
       name: options.name,
       frontendProject: options.frontendProject || '',
@@ -90,7 +90,7 @@ function getPackageConfig(options: NormalizedSchema): TargetConfiguration {
 
 function getMakeConfig(options: NormalizedSchema): TargetConfiguration {
   return {
-    executor: 'nx-electron:make',
+    executor: '@kockicica/nx-electron:make',
     options: {
       name: options.name,
       frontendProject: options.frontendProject || '',
@@ -229,12 +229,12 @@ export async function generator(tree: Tree, schema: Schema) {
   }
 
   if (options.unitTestRunner === 'jest') {
-    const jestTask = await jestProjectGenerator(tree, {
+    const jestTask = await configurationGenerator(tree, {
       project: options.name,
       setupFile: 'none',
       skipSerializers: true,
       supportTsx: false,
-      babelJest: false,
+      compiler: 'babel',
       testEnvironment: 'node',
       skipFormat: true,
     });

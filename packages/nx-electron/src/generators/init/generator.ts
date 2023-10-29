@@ -14,7 +14,7 @@ function addDependencies(tree: Tree) {
     tree,
     {},
     {
-      'nx-electron': nxElectronVersion,
+      '@kockicica/nx-electron': nxElectronVersion,
       electron: electronVersion,
     }
   );
